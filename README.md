@@ -92,6 +92,10 @@ Um nun die Auswirkungen von neuen Kombinationen von Listenverbindungen auf die Z
 * FDP tritt aus allen Listenverbindungen aus
 * EDU tritt aus allen Listenverbindungen aus
 
+zum Test ausserdem:
+
+* **Szenario 0**: Alles bleibt wie es ist.
+
 
 
 ## Output-Files
