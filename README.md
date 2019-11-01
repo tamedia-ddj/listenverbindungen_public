@@ -1,112 +1,137 @@
-# Listenverbindungen Public
-
-### Untertitel
-
-<!---
-optional folgendermassen Bild einfügen:
-![Trump Hate](dt.png)
-Source: [Gage Skidmore](https://www.flickr.com/photos/gageskidmore/32758233090)>)
---->
-
-Kurzbeschreibung: Ein Rechercheteam von Tamedia veröffentlich diese Woche eine Serie von Artikeln zur Landwirtschaft. Es wurden dazu Daten über Direktzahlung sowie über 600 Strafurteile gegen Landwirte ausgewertet.
-
-In den vorliegenden Notebooks sind die relevanten Ausschnitte der Analyse dokumentiert. Der beiliegende Datensatz wurde zur Wahrung des Datenschutzes gekürzt und verändert (Gemeinde, Kantone und Zahlenwerte wurden willkürlich vertauscht).
-
-#### 
-**Datenquelle(n)**: Bundesamt für Landwirtschaft
-
-**Artikel**: [Titel des Artikels (inkl. Link)](https://github.com/tamedia-ddj/brennpunkt_bauernhof_public/blob/master/1_Kuerzungen.ipynb)
-
-## bei grösseren Projekten: Inhaltsverzeichnis
-
-1. Datenvorbereitung
-2. Beschreibung der Datenanlyse: [Link zu Notebook](https://github.com/tamedia-ddj/brennpunkt_bauernhof_public/blob/master/1_Kuerzungen.ipynb)
+# Listenverbindungen
 
 
 
-## Einführung / Verortung
-Der Datensatzes der 213'259 Direktzahlungen in den Jahren 2014 bis 2017 wird in einem ersten Schritt zur späteren Untersuchung aufbereitet. Variablen ohne Informationsgehalt werden entfernt und neue berechnet (z.B. die Summe aller Direktzahlungen, inkl. Ganzjahres- und Sömmerungsbetriebe).
+![Listenverbindungen in a nutshell](https://interaktiv.tagesanzeiger.ch/2019/listenverbindungen/so-funktioniert-eine-listenverbindung.svg)
 
-Zudem wird eine konsistente Liste aus Gemeinde-IDs, Gemeinden und Kantonen erstellt (Variablen `GDE_GEMEINDE_NR`, `GDE_NAME` und `ABJ_KANTON`). Aus administrativen Gründen ist die Verbindung von `GDE_NAME` und `ABJ_KANTON` im gelieferten Datensatz nicht durchgehend korrekt. Um Fehler zu vermeiden, wir in den folgenden Notebooks die hier erstellte Liste `clean_gde` als Referenz-Tabelle herbeigezogen.
+## Analyse der Wirkung von Listenverbindungen an der Schweizer Nationalratswahlen 2019
 
+Im Nachgang zu den am 20. Oktober 2019 stattgefundenen Nationalratswahlen führte das Tamedia-Datenteam im Rahmen der Nachwahlanalysen eine Untersuchung der Listenverbindungen durch. Die Resultate wurden am 29. Oktober 2019 im Artikel "Wahllisten-Poker: Wem er nützte, wer verlor" veröffentlicht.
 
-Ein Ausschnitt aus den ersten beschreibende Statistiken liefert ein Bild über die Verteilung und Entwicklung der Direktzahlungen und der Merkmale der begünstigten Bauernbetrieben.
+**Datenquelle(n)**: Bundesamt für Statistik ([opendata.swiss](https://opendata.swiss/de/dataset/eidg-wahlen-2019))
 
+**Artikel**: [Wahllisten-Poker: Wem er nützte, wer verlor](https://www.tagesanzeiger.ch/schweiz/wahlen/so-haben-die-mitteparteien-abgeraeumt/story/10506290)
 
-
-## Beschreibung der Datenanlyse
-
-Einige Beispielelemente:
-
-**Text:**
-
-In der Tabelle `cutbacks` werden auf Ebene der Gemeinde die Anzahl der Betriebe ermittelt, bei denen in 3 oder mehr Jahren (von insgesamt 4 Jahren) Kürzungen veranlasst wurden. Während des Exportprozesses wird der Spalte `multiple_cutbacks` die Anzahl Betriebe hinterlegt, die diese Bedingungen erfüllen.
-
-**Liste**
-
-* item 1
-* item 2
-* item 3
-* ...
+**Code**: [main.ipynb](https://github.com/tamedia-ddj/listenverbindungen_public/blob/master/main.ipynb)
 
 
-**Abschnitt mit code:**
+
+## Beschreibung
+Um die Gewinner und Verlierer der Listenverbindungen zu bestimmen, wurden mehrere Szenarien simuliert. Als Basis dienten die offiziellen Zahlen des Bundesamts für Statistik zu den eingereichten Wahllisten, den jeweiligen Listenverbindungen und den abgegebenen Stimmen nach Listen und Kantonen.
+
+In einem ersten Szenario wurden beim Berechnen der Sitzverteilung im Nationalrat überparteiliche Listenverbindungen komplett ignoriert. Differenzen zum realen Wahlresultat ergeben daraus die Bilanz über die Wirkung der Listenverbindungen.
+
+Ausgehend von den existierenden Listenverbindungen wurden für weitere Szenarien jeweils bestimmte Listenverbindungen gestrichen oder neue hinzugefügt. Die daraus resultierenden Sitzverteilungen ermöglichen Aussagen über die Wirkung alternativer Allianzen.
+
+Wenn eine Partei in einem Kanton mehrere Listen präsentiert hat (zum Beispiel Listen der Jungpartei oder eigene Seniorenlisten) wurden deren Stimmen in allen Szenarien zusammengefasst.
+
+
+
+## Berechnungen
+
+**Datengrundlage**
+
+Das Bundesamt für Statistik stellt bereits am Abend des Wahltages die Resulate der Wahlen auf opendata.swiss zur öffentlichen Verfügung. Neben Informationen zu Wahlbeteiligung, dem Abschneiden der Parteien auf Gemeinde- und Kantonsebene und den einzelnen Kandidierenden, werden die Wahl-Resulate auch auf Ebene der [kantonalen Wahllisten](https://www.bfs.admin.ch/bfsstatic/dam/assets/9386464/master) angeboten. Nachfolgend werden die zentralen Variabeln dieser "Listen"-Tabelle hervorgehoben:
+
+Variable | Beschreibunng
+--- | --- 
+`...` | ...
+`kanton_nummer ` | Eindeutige Kennziffer für die Kantone
+`liste_bezeichnung ` | Bezeichnung der jeweiligen Liste (Listentitel)
+`...` | ...
+`liste_unterlistenverbindung ` | Eine pro Kanton eindeutige Kennzeichung einer Unterlistenverbindung. Bestehend aus Buchstabe der Listenverbindung und aufsteigender Nummer für Unterlistenverbindung. (z.B.: `C2`)
+`liste_verbindung ` | Eine pro Kanton eindeutige Kennzeichung einer Listenverbindung. Bestenhend aus aufsteigenden Buchstaben. (z.B.: `C`)
+`...` | ...
+`partei_id ` | Eindeutige Kennziffer für die (Mutter-)Partei der jeweiligen Liste
+`stimmen_liste ` | Absolute Anzahl Stimmen, die die Liste im Kanton erhalten hat.
+
+
+ 
+**Szenario 1: Sitzverteilung ohne Listenverbindungen:**
+
+In einem ersten Szenario, dem Kern der Untersuchung, wird berechnet, wie die Sitzverteilung aussähe, gäbe es keine Listenverbindungen. Dazu werden pro Kanton (`kanton_nummer`) die Anzahl Stimmen (`stimmen_liste`) von allen Listen die der selben Partei (`partei_id`) angehören addiert. Gemäss dieser Stimmeanteile werden pro Kanton die ihm zustehenden Nationalratssitze neu verteilt. Dazu werden erst für jedes Vielfache der benötigten Stimmenzahl für einen Sitz den Parteien Sitze zugewiesen. Danach werden die Restmandate verteilt. (Anleitung: [Bundeskanzlei](https://www.bk.admin.ch/bk/de/home/politische-rechte/nationalratswahlen/nationalratswahlen-2019.html)) 
+
+<!--Vollmandate
+
 
 ```
-for filename in os.listdir(directory):
-    if (("srt" in filename)):
-        with open(directory+filename, "rb") as file:
-            ### decode and parse data
-            data = file.read().decode("iso-8859-1")
-            subtitle_generator = srt.parse(data)
-            subtitle = list(subtitle_generator)
-            identified_subtitles = identify_subtitles(subtitle)
-            
-            ### handle 1. counter for host, 2. comments and 3. counter for rest
-            for line in identified_subtitles:
-                if line[0] == "Moderator":
-                    words_moderator += len(tokenizer.tokenize(line[1]))
-                elif line[0] == "<---> Kommentar <--->":
-                    comments.append([filename, line[1]])
-                else:
-                    words_rest += len(tokenizer.tokenize(line[1]))
-``` 
+for i, row in tqdm(parteien.iterrows(), total=len(parteien)):
+    parteien.loc[i, "sitze_parteien"] = math.floor(row['stimmen_liste'] / row['verteilungszahl'])
+    parteien.loc[i, "reststimmen"] = row['stimmen_liste'] % row['verteilungszahl']
+```
+Restmandate
 
-**Tabelle:**
+```
+parteien["restmandate"] = 0
 
-Variable | Beschreibunng
---- | --- 
-`KUERZUNGEN` | Anzahl Kürzungen auf Gemeindeebene
-`BETRIEBE_TOTAL` | Anzahl Betriebe auf Gemeindeebene
-`KUERZUNGEN_ANTEIL` | Prozentualer Anteil der Betriebe die Kürzungen erhalten haben
-`KUERZUNGEN_BETRAG_AVG` | Durchschnittliche Höhe der Kürzungen pro Gemeinde
+for kanton in tqdm(parteien.kanton_nummer.unique()):
+    restmandate = parteien[parteien["kanton_nummer"] == kanton].anzahl_gewaehlte.sum() - parteien[parteien["kanton_nummer"] == kanton].sitze_parteien.sum()
+    
+    while restmandate > 0:
+        temp = parteien[parteien["kanton_nummer"] == kanton]
+        temp["verteilungrest"] = temp['stimmen_liste'] / (temp['sitze_parteien'] + temp['restmandate'] + 1)
+        idx = temp.sort_values(["verteilungrest"], ascending=False).index[0]
+        parteien.loc[idx, "restmandate"] += 1
+        restmandate -= 1
+```-->
+
+Zum Schluss von *Szenario 1* wird die Differenz zur realen Verteilung der Nationalratssitze berechnet,  exportiert (`diff_keine_listenverbindungen.csv` - siehe Output-Files) und zur Visualisierung weitergegeben.
 
 
+**Weitere Szenarien**
+
+Für die weiteren Szenarien wurden Listen- und Unterlistenverbindungen berücksichtigt. Mit der Funktion `calc_seats()`, die als Input die Listeninformationen (in der Form wie sie das BFS liefert) erwartet, wird unter Berücksichtigung aller Verbindungen die Sitzverteilung pro Kanton berechnet. Als Antwort liefert die Funktion eine Tabelle, die pro Kanton und Partei die gewonnenen Nationalratssitze ausweist.
+
+Um nun die Auswirkungen von neuen Kombinationen von Listenverbindungen auf die Zusammensetzung des Parlaments zu ermitteln, kann die ursprüngliche "Listen"-Tabelle modifiziert und erneut der  `calc_seats()`-Funktion übergeben werden. Durchgeführte Modifikationen der "Listen"-Tabelle sind:
+
+
+* FDP tritt in allen Kantonen den bestehenden SVP-Listenverbindungen bei. (falls keine Listenverbindung vorhanden wird eine erstellt)
+* Listenverbindungen von SP und Grünen werden in allen Kantonen aufgelöst. (Die Grünen verlassen die Listenverbindungen in denen SP vertreten ist)
+* FDP tritt in allen Kantonen den bestehenden CVP-Listenverbindungen bei. (falls keine Listenverbindung vorhanden wird eine erstellt)
+* Die breiten Mitte-Allianzen (EVP / CVP / BDP / GLP) werden aufgelöst.
+* FDP tritt aus allen Listenverbindungen aus
+* EDU tritt aus allen Listenverbindungen aus
 
 
 
-## Output Files
+## Output-Files
 
-### output/Datei1.csv
-
-Beschreibung der Datei die aus dem Dataframe `df1` erstellt wurde.
-
-Variable | Beschreibunng
---- | --- 
-`id ` | eindeutiger Identifikator
-`Variable1 ` | Beschreibung der ersten Variable
-`etc ` | und so weiter...
-
-
-### output/Datei2.csv
-
-Beschreibung der Datei die aus dem Dataframe `df2` erstellt wurde.
+### output/diff\_keine\_listenverbindungen.csv
 
 Variable | Beschreibunng
 --- | --- 
-`id ` | eindeutiger Identifikator
-`Variable1 ` | Beschreibung der ersten Variable
-`etc ` | und so weiter...
+`partei_bezeichnung_kurz_de ` | Parteibezeichnung Kurzform
+`sitze_diff ` | Differenz zur realen Sitzverteilung im Nationalrat - negative Werte bedeuten, dass in einer Wahl ohne Listenverbindung die jeweilige Partei mehr Sitze erhalten hätte
+
+
+### output/svpfdp\_listenverbindung.csv
+
+Variable | Beschreibunng
+--- | --- 
+`parteiname ` | Parteibezeichnung Kurzform
+`sitze ` | Anzahl Sitze im Nationalrat, die der jeweiligen Partei auf Basis der modifizierten "Listen"-Tabelle zustehen
+
+### output/spgps\_listenverbindung.csv
+
+Variable | Beschreibunng
+--- | --- 
+`parteiname ` | Parteibezeichnung Kurzform
+`sitze ` | Anzahl Sitze im Nationalrat, die der jeweiligen Partei auf Basis der modifizierten "Listen"-Tabelle zustehen
+
+### output/ohne\_mitteallianz\_listenverbindung.csv
+
+Variable | Beschreibunng
+--- | --- 
+`parteiname ` | Parteibezeichnung Kurzform
+`sitze ` | Anzahl Sitze im Nationalrat, die der jeweiligen Partei auf Basis der modifizierten "Listen"-Tabelle zustehen
+
+### output/fdpcvp\_listenverbindung.csv
+
+Variable | Beschreibunng
+--- | --- 
+`parteiname ` | Parteibezeichnung Kurzform
+`sitze ` | Anzahl Sitze im Nationalrat, die der jeweiligen Partei auf Basis der modifizierten "Listen"-Tabelle zustehen
+
 
 
 ## Lizenz
