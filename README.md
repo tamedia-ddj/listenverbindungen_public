@@ -96,6 +96,8 @@ zum Test ausserdem:
 
 * **Szenario 0**: Alles bleibt wie es ist.
 
+Wird das Argument `print_output = True` der Funktion `calc_seats()` übergeben, lässt sich die Berechung der Sitzverrteilung über die verschiedenen Ebenen (Listen, Listenverbindung, Unterlistenverbindung) Schritt für Schritt nachvollziehen.
+
 
 
 ## Output-Files
